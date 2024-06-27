@@ -1,14 +1,39 @@
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb+srv://admin:12345678S%40@assignment.mopurbv.mongodb.net/');
-const userSchema = mongoose.Schema({
-    name: String,
-    email: String,
-    password: String,
+// Create a Schema for Users
+const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        lowercase: true,
+        minLength: 3,
+        maxLength: 30
+    },
+    password: {
+        type: String,
+        required: true,
+        minLength: 6
+    },
+    firstName: {
+        type: String,
+        required: true,
+        trim: true,
+        maxLength: 50
+    },
+    lastName: {
+        type: String,
+        required: true,
+        trim: true,
+        maxLength: 50
+    }
 });
 
+// Create a model from the schema
 const User = mongoose.model('User', userSchema);
 
-module.export = {
-    User,
-}
+module.exports = {
+	User
+};
