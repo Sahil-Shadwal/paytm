@@ -15,20 +15,13 @@ const signupBody = zod.object({
 })
 
 router.post("/signup", async (req, res) => {
-    const parseResult = signupBody.safeParse(req.body);
-    if (!parseResult.success) {
-        // Assuming `signupBody.safeParse` provides detailed error information in `parseResult.error`
-        return res.status(400).json({
-            message: "Incorrect inputs",
-            errors: parseResult.error // Providing detailed error information
-        });
+    
+    const { success } = signupBody.safeParse(req.body)
+    if (!success) {
+        return res.status(411).json({
+            message: "Email already taken / Incorrect inputs"
+        })
     }
-    // const { success } = signupBody.safeParse(req.body)
-    // if (!success) {
-    //     return res.status(411).json({
-    //         message: "Email already taken / Incorrect inputs"
-    //     })
-    // }
 
     const existingUser = await User.findOne({
         username: req.body.username
@@ -36,7 +29,7 @@ router.post("/signup", async (req, res) => {
 
     if (existingUser) {
         return res.status(411).json({
-            message: "Email already fuck off taken/Incorrect inputs"
+            message: "Email already taken/Incorrect inputs"
         })
     }
 
